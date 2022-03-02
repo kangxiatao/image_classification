@@ -34,7 +34,7 @@ from models.convmixer import ConvMixer
 def init_config():
     parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
     parser.add_argument('--exp_name', type=str, default='my_test')
-    parser.add_argument('--lr', default=1e-1, type=float, help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
+    parser.add_argument('--lr', default=6, type=float, help='learning rate')  # resnets.. 1e-3, Vit..1e-4?
     parser.add_argument('--wd', default=5e-4, type=float, help='weight decay')
     parser.add_argument('--opt', default="sgdm")
     parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
@@ -75,6 +75,16 @@ def init_config():
     for _key in vars(args):
         config.send_mail_str += f'{_key}:{config[_key]},'
     config.send_mail_str += "\n"
+
+    # 重新配置学习了
+    if config.lr == 6:
+        if 'vgg' in config.net:
+            config.lr = 1e-1
+        elif 'res' in config.net:
+            config.lr = 1e-1
+        else:
+            config.lr = 1e-4
+
 
     return config
 
